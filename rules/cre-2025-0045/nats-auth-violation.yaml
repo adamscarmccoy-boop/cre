@@ -51,5 +51,6 @@ rules:
     set:
       event:
         source: cre.log.nats
+        origin: true
       match:
         - value: "nats: Authorization Violation"

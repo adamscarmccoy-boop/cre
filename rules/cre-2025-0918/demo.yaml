@@ -31,6 +31,7 @@ rules:
         window: 1s
         event:
           source: cre.log.demo
+          origin: true
         match:
           - "panic: intentional panic inside goroutine for demo purposes"
           - regex: "main.panicHandler(.+)demo.go"

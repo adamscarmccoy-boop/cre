@@ -43,6 +43,7 @@ rules:
     set:
       event:
         source: cre.log.redis
+        origin: true
       match:
         - "redis.exceptions.ConnectionError: Connection closed by server"
   

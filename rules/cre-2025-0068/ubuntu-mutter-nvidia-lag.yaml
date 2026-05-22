@@ -43,5 +43,6 @@ rules:
     set:
       event:
         source: cre.log.syslog
+        origin: true
       match:
         - regex: "gnome-shell(.+)Can't update stage views actor(.+)is on because it needs an allocation."

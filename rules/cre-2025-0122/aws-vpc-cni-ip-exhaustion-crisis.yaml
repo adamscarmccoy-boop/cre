@@ -89,5 +89,6 @@ rules:
       set:
         event:
           source: cre.log.aws-vpc-cni
+          origin: true
         match:
           - regex: "failed to allocate a private IP address.*no available IP addresses|ENI allocation failed.*insufficient IP addresses|failed to assign private IP.*AddressLimitExceeded|pod.*failed.*no available IP|insufficient IP addresses in subnet|failed to create ENI.*AddressLimitExceeded|unable to provision ENI.*IP address limit|failed to allocate IP.*subnet has no available addresses|pod scheduling failed.*insufficient IP addresses|CNI failed to allocate IP.*no free addresses"

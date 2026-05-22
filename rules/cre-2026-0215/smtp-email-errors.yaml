@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.alertmanager-15-log-based-cre-candidates
+          origin: true
         match:
           - value: "smtp authentication failed"

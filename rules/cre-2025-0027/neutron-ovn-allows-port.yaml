@@ -44,6 +44,7 @@ rules:
       window: 2s
       event:
         source: cre.log.neutron
+        origin: true
       order:
         - regex: "Failed to bind port(.+)for vnic_type(.+)using segments(.+)"
         - regex: "Refusing to bind port(.+)to dead agent"

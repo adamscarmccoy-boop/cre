@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.harbor-goharbor-harbor-15-log-based-cre-candidates
+          origin: true
         match:
           - value: "no space left on device"

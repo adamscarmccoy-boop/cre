@@ -75,6 +75,7 @@ rules:
         window: 3m
         event:
           source: cre.log.postgresql
+          origin: true
         match:
           - regex: 'ERROR:\s+relation\s+"(alembic_version|relation_tuple_transaction)"\s+does\s+not\s+exist'
             count: 3

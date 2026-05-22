@@ -45,7 +45,6 @@ rules:
         - "https://docs.redpanda.com/docs/concepts/architecture/raft/"
         - "https://vectorized.io"
       reports: 0
-      version: "0.1.0"
       applications:
         - name: "redpanda"
           processName: "redpanda"
@@ -54,5 +53,6 @@ rules:
       set:
         event:
           source: cre.log.redpanda
+          origin: true
         match:
           - regex: "Error occurred while sending node status request: rpc::errc::exponential_backoff"

@@ -37,6 +37,7 @@ rules:
     set:
       event:
         source: cre.log.terraform
+        origin: true
       match:
         - 'Failed to create workspace. Status code: 401, Response: {"errors":[{"status":"401","title":"unauthorized"}]}'
  

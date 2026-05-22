@@ -57,5 +57,6 @@ rules:
     set:
         event:
             source: cre.log.nginx
+            origin: true
         match:
             - upstream sent too big header

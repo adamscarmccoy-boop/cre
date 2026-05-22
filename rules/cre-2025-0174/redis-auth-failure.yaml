@@ -75,6 +75,7 @@ rules:
         window: 120s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "WRONGPASS invalid username-password pair"
           - regex: "NOAUTH Authentication required"

@@ -40,5 +40,6 @@ rules:
     set:
       event:
         source: cre.log.aws.eks-nodeagent
+        origin: true
       match:
         - "Logger.check error: failed to get caller"

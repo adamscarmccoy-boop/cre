@@ -85,6 +85,7 @@ rules:
         window: 300s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "Slow log.*microseconds|slowlog.*exceeded"
           - regex: "command.*took.*milliseconds|Query execution.*slow"

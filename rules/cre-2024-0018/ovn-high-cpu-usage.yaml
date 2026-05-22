@@ -42,6 +42,7 @@ rules:
         window: 5s
         event:
           source: cre.log.neutron
+          origin: true
         match:
           - regex: Dropped(.+)log messages in last(.+)due to excessive rate
           - regex: Unreasonably long(.+)poll interval

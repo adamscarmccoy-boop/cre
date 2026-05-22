@@ -53,7 +53,6 @@ rules:
         - "https://slurm.schedmd.com/slurmdbd.html"
         - "https://github.com/SchedMD/slurm"
       reports: 0
-      version: "0.1.0"
       applications:
         - name: "slurmdbd"
           processName: "slurmdbd"
@@ -68,5 +67,6 @@ rules:
       set:
         event:
           source: cre.log.slurm
+          origin: true
         match:
           - regex: "(ERROR\\s+2002 \\(HY000\\): Can't connect to MySQL server on 'mysql'|slurmdbd: (debug2: Attempting to connect to mysql:3306|error: (mysql_real_connect failed: (2002.*|.*Unknown MySQL server host 'mysql'.*)|unable to re-connect to as_mysql database|Processing last message from connection.*))|slurmctld: (accounting_storage/slurmdbd: dbd_conn_send_recv_rc_msg: Issue with call DBD_CLUSTER_TRES.*Unable to connect to database|error: slurm_receive_msg .* Zero Bytes were transmitted or received))"

@@ -37,6 +37,7 @@ rules:
         window: 30s
         event:
           source: cre.log.rabbitmq
+          origin: true
         order:
           - regex: Discarding message(.+)in an old incarnation(.+)of this node
           - value: Mnesia is overloaded

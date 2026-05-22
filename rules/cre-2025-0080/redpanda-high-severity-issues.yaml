@@ -2,7 +2,6 @@ rules:
   - metadata:
       id: ArpxWk5dVu2Vw6wHQXYNBY
       kind: prequel
-      version: "0.1.0"
     cre:
       id: CRE-2025-0080
       severity: 1
@@ -62,7 +61,6 @@ rules:
         - "https://docs.redpanda.com/current/manage/monitoring/"
         - "https://vectorized.io"
       reports: 1
-      version: "0.1.0"
       applications:
         - name: "redpanda"
           processName: "redpanda"
@@ -71,6 +69,7 @@ rules:
       set:
         event:
           source: cre.log.redpanda
+          origin: true
         match:
           - regex:
               "Failure during startup: .*filesystem_error.*Permission denied.*crash_reports|heartbeat_manager\\.cc:\\d+.*Received error when sending heartbeats to node \\d+ - rpc::errc::exponential_backoff|transport\\.cc:\\d+.*RPC timeout.*node_status_rpc::node_status| transport\\.cc:\\d+.*Unable to find handler for correlation \\d+| Error occurred while sending node status request: rpc::errc::client_request_timeout"

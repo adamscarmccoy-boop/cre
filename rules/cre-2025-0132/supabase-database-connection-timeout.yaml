@@ -69,6 +69,7 @@ rules:
         window: 5m
         event:
           source: cre.log.supabase
+          origin: true
         match:
           - regex: 'connection.*refused.*5432|timeout.*database|dial tcp.*5432.*connection refused'
           - regex: 'failed to connect to.*postgres|database connection.*timeout|connection reset by peer'

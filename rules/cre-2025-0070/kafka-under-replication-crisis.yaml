@@ -68,6 +68,7 @@ rules:
         window: 120s
         event:
           source: cre.log.kafka
+          origin: true
         order:
           - regex: "Partition .* marked as failed|ReplicaFetcher.*Shutting down"
           - regex: "ISR \\[1,3\\].*removing replicas"

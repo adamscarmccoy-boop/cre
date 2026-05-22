@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.strimzi-kafka-operator-strimzi-strimzi-kafka-operator-15-cres
+          origin: true
         match:
           - value: "topic-operator failed"

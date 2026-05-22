@@ -45,6 +45,7 @@ rules:
     set:
       event:
         source: cre.log.opentelemetry-collector
+        origin: true
       window: 50s
       match:
         - regex: .*Exporting failed.*context deadline exceeded.*

@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.prometheus-15-log-based-cre-candidates
+          origin: true
         match:
           - value: "x509: certificate signed by unknown authority"

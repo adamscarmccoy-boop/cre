@@ -76,6 +76,7 @@ rules:
         window: 120s
         event:
           source: cre.log.redpanda.consumer
+          origin: true
         order:
           - regex: "Leaving consumer group.*crash-test-group"
           - regex: "LeaveGroup request.*returned successfully"           

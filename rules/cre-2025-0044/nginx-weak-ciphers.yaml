@@ -47,5 +47,6 @@ rules:
       set:
         event:
           source: cre.config.nginx
+          origin: true
         match:
           - regex: "ssl_ciphers(.+)(DES-CBC3-SHA|RC4-SHA|AES128-SHA|ECDHE-RSA-SHA1|EXP|MD5|ADH-(AES|DES)|NULL-SHA)(.+);"

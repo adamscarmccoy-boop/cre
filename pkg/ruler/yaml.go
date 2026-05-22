@@ -1,14 +1,9 @@
 package ruler
 
-import (
-	"github.com/prequel-dev/prequel-compiler/pkg/parser"
-)
-
 type RuleIncludeT struct {
-	Metadata   parser.ParseRuleMetadataT `yaml:"metadata"`
-	Tags       []TagT                    `yaml:"tags,omitempty"`
-	Categories []TagT                    `yaml:"categories,omitempty"`
-	Rules      []parser.ParseRuleT       `yaml:"rule"`
+	Metadata   MetadataT `yaml:"metadata"`
+	Tags       []TagT    `yaml:"tags,omitempty"`
+	Categories []TagT    `yaml:"categories,omitempty"`
 }
 
 type TagT struct {
@@ -17,4 +12,10 @@ type TagT struct {
 	Description string `yaml:"description" binding:"required"`
 	Hash        string `yaml:"hash,omitempty"`
 	Kind        string `yaml:"kind,omitempty"`
+}
+
+type MetadataT struct {
+	Kind string `yaml:"kind" binding:"required"`
+	Id   string `yaml:"id" binding:"required"`
+	Gen  string `yaml:"gen,omitempty"`
 }

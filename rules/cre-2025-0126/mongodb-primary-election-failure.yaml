@@ -62,5 +62,6 @@ rules:
       set:
         event:
           source: cre.log.mongodb
+          origin: true
         match:
           - regex: "No primary exists currently|PrimarySteppedDown: No primary exists currently|Failed to refresh query analysis configurations.*No primary exists currently|Starting an election, since we have seen no PRIMARY in election timeout period|election timeout period|Election timeout|ShutdownInProgress|In the process of shutting down|received an invalid response|heartbeat.*timeout|heartbeat.*failed|network.*partition|connection.*refused|connection.*timeout|HostUnreachable|Replica set state transition.*SECONDARY|Member is in new state.*SECONDARY|stepping up to primary|stepping down from primary"

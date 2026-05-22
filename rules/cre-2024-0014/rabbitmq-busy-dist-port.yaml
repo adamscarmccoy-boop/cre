@@ -50,5 +50,6 @@ rules:
       set:
         event:
           source: cre.log.rabbitmq
+          origin: true
         match:
           - regex: "[warning](.+)rabbit_sysmon_handler busy_dist_port"

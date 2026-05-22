@@ -63,5 +63,6 @@ rules:
       set:
         event:
           source: cre.log.nginx
+          origin: true
         match:
           - regex: "(\\d)+ the rewritten URI has a zero length"

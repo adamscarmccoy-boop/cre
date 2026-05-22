@@ -97,6 +97,7 @@ rules:
         window: 300s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "Bad file format reading the append only file"
           - regex: "AOF.*corrupted|corrupt.*AOF"

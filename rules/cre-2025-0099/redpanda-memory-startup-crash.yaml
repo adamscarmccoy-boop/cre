@@ -1,10 +1,27 @@
+terms:
+  permission_failures: &permission_failures
+    field: message
+    regex: "(?i)(EACCESS.*perf|perf.*creation failed.*EACCESS|perf_event_paranoid)"
+    count: 2
+
+  config_errors: &config_errors
+    field: message
+    regex: "(?i)(filesystem_error.*no such file|can't load config|bootstrap.*file.*error)"
+
+  crash_termination: &crash_termination
+    field: message
+    regex: "(?i)(container.*crashed|final status.*exited.*137|redpanda.*terminated)"
+
+  successful_recovery: &successful_recovery
+    field: message
+    regex: "(?i)(started successfully|ready.*accept.*connections|kafka.*server.*listening)"
+
 rules:
   - metadata:
       kind: prequel
       id: 4hje4sHmZW2GnSxijP6TQh
     cre:
       id: CRE-2025-0099
-      generation: 1
       severity: 1
       title: "Redpanda Crash Due to Memory Exhaustion and Startup Failures"
       category: data-streaming-platforms
@@ -35,7 +52,6 @@ rules:
         - "https://docs.redpanda.com/current/troubleshoot/cluster-diagnostics/k-diagnose-issues/"
         - "https://docs.redpanda.com/current/troubleshoot/errors-solutions/"
       reports: 1
-      version: "1.0.0"
       tags:
         - redpanda
         - container-crash
@@ -64,26 +80,9 @@ rules:
           source: cre.log.redpanda
           origin: true
         order:
-          - permission_failures
-          - config_errors
-          - crash_termination
+          - *permission_failures
+          - *config_errors
+          - *crash_termination
         negate:
-          - successful_recovery
+          - *successful_recovery
 
-terms:
-  permission_failures:
-    field: message
-    regex: "(?i)(EACCESS.*perf|perf.*creation failed.*EACCESS|perf_event_paranoid)"
-    count: 2
-
-  config_errors:
-    field: message
-    regex: "(?i)(filesystem_error.*no such file|can't load config|bootstrap.*file.*error)"
-
-  crash_termination:
-    field: message
-    regex: "(?i)(container.*crashed|final status.*exited.*137|redpanda.*terminated)"
-
-  successful_recovery:
-    field: message
-    regex: "(?i)(started successfully|ready.*accept.*connections|kafka.*server.*listening)"

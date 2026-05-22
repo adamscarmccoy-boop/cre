@@ -65,6 +65,7 @@ rules:
       window: 120s
       event:
         source: cre.log.redis
+        origin: true
       match:
         - regex: "OOM command not allowed when used memory > 'maxmemory'"
         - regex: "used_memory.*maxmemory.*OOM"

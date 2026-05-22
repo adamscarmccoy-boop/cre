@@ -59,5 +59,6 @@ rules:
     set:
       event:
         source: cre.log.nginx
+        origin: true
       match:
         - upstream timed out

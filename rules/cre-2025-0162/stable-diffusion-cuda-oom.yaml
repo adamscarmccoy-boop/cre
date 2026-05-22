@@ -64,6 +64,7 @@ rules:
         window: 120s
         event:
           source: cre.log.stable-diffusion
+          origin: true
         match:
           - regex: 'OutOfMemoryError.*CUDA out of memory'
           - regex: 'CUDA out of memory.*Tried to allocate'

@@ -3,7 +3,6 @@ rules:
       id: URE4JfAmWXG8qee2kyZcps
       gen: 1
       kind: "prequel"
-      version: "1.0.0"
     cre:
       id: CRE-2025-0090
       title: Loki Log Line Exceeds Max Size Limit
@@ -52,5 +51,6 @@ rules:
       set: # Using 'set' for single event matching, as it's a single log line detection
         event:
           source: cre.log.alloy
+          origin: true
         match:
           - regex: level=error(.+)final error sending batch(.+)component_id=loki\.write\.endpoint(.+)error(.+)server returned HTTP status 400 Bad Request(.+)Max entry size(.+)exceeded for stream

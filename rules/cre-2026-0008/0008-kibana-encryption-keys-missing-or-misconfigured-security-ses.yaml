@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.kibana
+          origin: true
         match:
           - value: "Generating a random key for xpack.security.encryptionKey"

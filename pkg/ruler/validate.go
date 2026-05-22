@@ -3,7 +3,6 @@ package ruler
 import (
 	"errors"
 
-	"github.com/prequel-dev/prequel-compiler/pkg/parser"
 	"github.com/rs/zerolog/log"
 )
 
@@ -39,6 +38,7 @@ func validateTagsFields(t RuleIncludeT, tags tagsT) error {
 	}
 
 	return validateTags(t.Tags, t.Metadata.Kind, tags)
+
 }
 
 func validateCategoriesFields(t RuleIncludeT, tags tagsT) error {
@@ -47,6 +47,7 @@ func validateCategoriesFields(t RuleIncludeT, tags tagsT) error {
 	}
 
 	return validateTags(t.Categories, t.Metadata.Kind, tags)
+	return nil
 }
 
 func validateTags(tags []TagT, kind string, dupes tagsT) error {
@@ -88,43 +89,43 @@ func validateTags(tags []TagT, kind string, dupes tagsT) error {
 	return nil
 }
 
-func validateRules(rules *parser.RulesT, allRules, allTerms dupesT, tags tagsT) error {
+func validateRules(rules []ruleDataT, allRules dupesT, tags tagsT) error {
 
-	for _, rule := range rules.Rules {
+	for _, r := range rules {
 
 		log.Debug().
-			Str("id", rule.Cre.Id).
+			Str("id", r.rule.Cre.Id).
 			Msg("Processing rule")
 
-		if rule.Cre.Id == "" {
+		if r.rule.Cre.Id == "" {
 			log.Error().
-				Any("rule", rules).
+				Any("rule", r.rule).
 				Msg("Missing CRE id")
 			return ErrMissingId
 		}
 
-		if rule.Metadata.Id == "" {
+		if r.rule.Metadata.Id == "" {
 			log.Error().
-				Any("rule", rules).
+				Any("rule", r.rule).
 				Msg("Missing rule id")
 			return ErrMissingId
 		}
 
-		if rule.Cre.Category == "" {
+		if r.rule.Cre.Category == "" {
 			log.Error().
-				Any("rule", rules).
+				Any("rule", r.rule).
 				Msg("Missing category")
 			return ErrMissingCategory
 		}
 
-		if _, ok := tags[rule.Cre.Category]; !ok {
+		if _, ok := tags[r.rule.Cre.Category]; !ok {
 			log.Error().
-				Str("category", rule.Cre.Category).
+				Str("category", r.rule.Cre.Category).
 				Msg("Unknown category")
 			return ErrUnknownCategory
 		}
 
-		for _, tag := range rule.Cre.Tags {
+		for _, tag := range r.rule.Cre.Tags {
 			if _, ok := tags[tag]; !ok {
 				log.Error().
 					Str("tag", tag).
@@ -133,19 +134,11 @@ func validateRules(rules *parser.RulesT, allRules, allTerms dupesT, tags tagsT) 
 			}
 		}
 
-		if _, ok := allRules[rule.Cre.Id]; ok {
+		if _, ok := allRules[r.rule.Cre.Id]; ok {
 			log.Error().
-				Str("id", rule.Cre.Id).
+				Str("id", r.rule.Cre.Id).
 				Msg("Duplicate rule id")
 			return ErrDuplicateRuleId
-		}
-	}
-
-	for key := range rules.TermsT {
-		if _, ok := allTerms[key]; ok {
-			log.Error().
-				Str("id", key).
-				Msg("Duplicate term key")
 		}
 	}
 

@@ -4,7 +4,6 @@ rules:
       hash: Eg2xjMqhKEprGENhqmHtro
       gen: 1
       kind: prequel
-      version: "0.1.0"
     cre:
       id: CRE-2025-0069
       severity: 2
@@ -40,7 +39,6 @@ rules:
         - "https://github.com/kubernetes/examples/issues/260"
         - "https://stackoverflow.com/questions/50854701/kubernetes-permission-denied-for-mounted-nfs-volume"
       reports: 0
-      version: "0.1.0"
       applications:
         - name: "kubelet"
           processName: "kubelet"
@@ -50,6 +48,7 @@ rules:
         window: 5s
         event:
           source: cre.prequel.kubernetes.resource.persistentvolumes.v1
+          origin: true
         match:
           - jq: '.kind == "PersistentVolume" and (.spec.nfs != null)'
           - jq: >

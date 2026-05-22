@@ -32,5 +32,6 @@ rules:
       set:
         event:
           source: cre.log.metrics-server-kubernetes-sigs-metrics-server
+          origin: true
         match:
           - value: "x509: certificate signed by unknown authority"

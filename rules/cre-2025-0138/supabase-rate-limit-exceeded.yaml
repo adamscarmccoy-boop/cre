@@ -74,6 +74,7 @@ rules:
         window: 5m
         event:
           source: cre.log.kong
+          origin: true
         match:
           - regex: 'HTTP.*429.*Too Many Requests|rate limit exceeded|quota exceeded'
           - regex: 'rate-limiting.*rejected|API.*throttled|request.*rate limited'

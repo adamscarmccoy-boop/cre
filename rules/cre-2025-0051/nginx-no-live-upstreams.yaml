@@ -38,5 +38,6 @@ rules:
     set:
         event:
             source: cre.log.nginx
+            origin: true
         match:
             - regex: '[error].+no live upstreams while connecting to upstream'

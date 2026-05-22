@@ -79,6 +79,7 @@ rules:
       window: 120s
       event:
         source: cre.log.redis
+        origin: true
       match:
         - regex: "max number of clients reached"
         - regex: "ERR max number of clients reached"

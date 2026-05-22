@@ -80,6 +80,7 @@ rules:
         window: 300s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "Unable to connect to MASTER"
           - regex: "MASTER.*sync.*timeout"

@@ -126,6 +126,7 @@ rules:
       window: 300s
       event:
         source: cre.log.redis
+        origin: true
       match:
         # Issue 1: Out-of-Memory (OOM) errors
         - regex: "OOM command not allowed when used memory > 'maxmemory'"

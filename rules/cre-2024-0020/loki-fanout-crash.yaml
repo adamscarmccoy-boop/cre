@@ -33,6 +33,7 @@ rules:
       window: 5s
       event:
         source: cre.log.alloy
+        origin: true
       order:
         - regex: panic(.+)runtime error(.+)invalid memory address or nil pointer dereference
         - regex: github.com/grafana/alloy/internal/component/loki/process(.+)handleOut

@@ -70,5 +70,6 @@ rules:
       set:
         event:
           source: cre.log.redis-cli
+          origin: true
         match:
           - regex: "OOM command not allowed when used memory > 'maxmemory'"

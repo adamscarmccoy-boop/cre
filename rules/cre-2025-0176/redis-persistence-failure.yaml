@@ -86,6 +86,7 @@ rules:
         window: 180s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "MISCONF Redis is configured to save RDB snapshots.*unable to persist.*disk"
           - regex: "Can't save in background"

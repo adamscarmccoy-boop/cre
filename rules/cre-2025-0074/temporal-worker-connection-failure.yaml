@@ -62,6 +62,7 @@ rules:
         window: 120s
         event:
           source: cre.log.temporal.worker
+          origin: true
         order:
           - regex: "Failed to connect to Temporal: failed reaching server"
           - regex: "connection refused"

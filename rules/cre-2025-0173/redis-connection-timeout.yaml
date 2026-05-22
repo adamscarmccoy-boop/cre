@@ -79,6 +79,7 @@ rules:
       window: 180s
       event:
         source: cre.log.redis
+        origin: true
       match:
         - regex: "Connection timeout"
         - regex: "Unable to connect to Redis"

@@ -58,6 +58,7 @@ rules:
         window: 5m
         event:
           source: cre.log.supabase
+          origin: true
         match:
           - regex: 'Error starting userland proxy.*5432.*bind.*address already in use'
           - regex: 'Ports are not available.*5432.*bind.*address already in use'

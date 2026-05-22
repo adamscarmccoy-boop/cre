@@ -39,5 +39,6 @@ rules:
     set:
       event:
         source: cre.log.loki
+        origin: true
       match:
         - regex: 'loki.storage.aws: WebIdentityErr: failed to retrieve credentials.*SerializationError.*'

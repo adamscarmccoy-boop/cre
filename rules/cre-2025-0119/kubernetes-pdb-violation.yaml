@@ -78,21 +78,11 @@ rules:
       id: 6XwKpQmNzRvTyLsHdBgFcA
       gen: 1
     rule:
-      set:
-        event:
-          source: cre.kubernetes
-        window: 5m
-        match:
-          - regex: "Warning\\s+PodDisruptionBudgetViolation.+Pod disruption budget violation detected: maxUnavailable: \\d+ conflicts with minAvailable: \\d+"
-          - regex: "Normal\\s+Killing\\s+pod/.+\\s+Stopping container"
-          - regex: "Warning\\s+Unhealthy\\s+pod/.+\\s+Readiness probe failed"
-          - regex: "Warning\\s+FailedScheduling.+cannot enforce pod-disruption-budget.+"
-          - regex: "Warning\\s+EvictionWarning.+evicting pod.+disruption budget denied"
-          - regex: "Warning\\s+NodeDrainPDBViolation.+cannot drain node.+PDB violation"
       sequence:
         window: 10m
         event:
           source: cre.kubernetes
+          origin: true
         order:
           - regex: "Normal\\s+ScalingReplicaSet.+Scaled up replica set.+"
           - regex: "Warning\\s+PodDisruptionBudgetViolation.+"

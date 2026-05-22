@@ -73,6 +73,7 @@ rules:
         window: 2m
         event:
           source: cre.log.spicedb
+          origin: true
         match:
           - regex: 'schema validation (failed|error)'
             count: 2

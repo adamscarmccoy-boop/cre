@@ -90,5 +90,6 @@ rules:
       set:
         event:
           source: cre.log.temporal
+          origin: true
         match:
           - regex: '(?i)pq: cannot execute (INSERT|UPDATE|DELETE) in a read-only transaction'

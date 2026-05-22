@@ -2,7 +2,7 @@ rules:
   - metadata:
       id: 3XWJJQRXwFVG1aJPammi5j
       hash: CAbgxyQnLLP12A6GrRHAdcBsbtstGio1gEAj3kLqyRe9
-      generation: 1
+      gen: 1
       kind: prequel
     cre:
       id: CRE-2025-0071
@@ -42,7 +42,6 @@ rules:
         - "https://kubernetes.io/docs/tasks/administer-cluster/dns-debugging-resolution/"
         - "https://coredns.io/manual/toc/#troubleshooting"
       reports: 0
-      version: "0.1.0"
       applications:
         - name: "coredns"
           processName: "coredns"
@@ -54,5 +53,6 @@ rules:
       set:
         event:
           source: cre.kubernetes
+          origin: true
         match:
           - regex: "Scaled down replica set coredns-.+ from [1-9]+ to 0"

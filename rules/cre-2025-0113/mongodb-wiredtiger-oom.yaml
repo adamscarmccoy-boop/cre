@@ -78,6 +78,7 @@ rules:
         window: 300s
         event:
           source: cre.log.mongodb
+          origin: true
         order:
           # Memory constraint warning
           - regex: 'Memory available to mongo process is less than total system memory'

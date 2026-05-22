@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.kibana
+          origin: true
         match:
           - value: "Document contains at least one immense term"

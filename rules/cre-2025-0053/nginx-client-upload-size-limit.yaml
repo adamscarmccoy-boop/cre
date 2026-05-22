@@ -43,5 +43,6 @@ rules:
     set:
         event:
             source: cre.log.nginx
+            origin: true
         match:
           - regex: 'client intended to send too large body: '

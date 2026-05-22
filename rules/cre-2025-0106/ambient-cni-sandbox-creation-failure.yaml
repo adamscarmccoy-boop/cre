@@ -50,6 +50,7 @@ rules:
         window: 60s
         event:
           source: cre.kubernetes
+          origin: true
         match:
           - regex: "FailedCreatePodSandBox"
           - regex: "no ztunnel connection"

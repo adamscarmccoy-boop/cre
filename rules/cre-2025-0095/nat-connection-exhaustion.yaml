@@ -59,6 +59,7 @@ rules:
         window: 60s
         event:
           source: cre.log.nats
+          origin: true
         match:
           
           - regex: '(?i)maximum connections exceeded'

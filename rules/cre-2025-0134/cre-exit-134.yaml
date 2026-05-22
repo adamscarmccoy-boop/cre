@@ -40,5 +40,6 @@ rules:
       set:
         event:
           source: cre.kubernetes
+          origin: true
         match:
           - regex: "^[^\\t]+\\t[^\\t/]+/[^\\t]+\\t[^\\t]+\\t[^\\t]*\\t134$"

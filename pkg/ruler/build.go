@@ -1,7 +1,6 @@
 package ruler
 
 import (
-	"bytes"
 	"errors"
 	"fmt"
 	"os"
@@ -10,8 +9,10 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/itchyny/gojq"
 	"github.com/prequel-dev/prequel-compiler/pkg/ast"
-	"github.com/prequel-dev/prequel-compiler/pkg/parser"
+	"github.com/prequel-dev/prequel-compiler/pkg/compiler"
+
 	"github.com/rs/zerolog/log"
 	"golang.org/x/mod/semver"
 	"gopkg.in/yaml.v3"
@@ -117,15 +118,9 @@ func processTags(inPath string) (*tagDataT, error) {
 	return td, nil
 }
 
-func processRules(path string, ruleDupes, termDupes dupesT, tags tagsT) (*parser.RulesT, error) {
-
+func processRules(path string, ruleDupes dupesT, tags tagsT, opts ...ast.ParseOpt) ([]ruleDataT, error) {
 	var (
-		rulesData []byte
-		allRules  = &parser.RulesT{
-			Rules:  make([]parser.ParseRuleT, 0),
-			TermsT: make(map[string]parser.ParseTermT),
-		}
-		err error
+		allRules []ruleDataT
 	)
 
 	yamls, err := os.ReadDir(path)
@@ -136,11 +131,6 @@ func processRules(path string, ruleDupes, termDupes dupesT, tags tagsT) (*parser
 
 	for _, y := range yamls {
 
-		var (
-			rules *parser.RulesT
-			f     = filepath.Join(path, y.Name())
-		)
-
 		log.Debug().
 			Str("file", y.Name()).
 			Msg("Processing rule")
@@ -149,50 +139,93 @@ func processRules(path string, ruleDupes, termDupes dupesT, tags tagsT) (*parser
 			continue
 		}
 
-		rulesData, err = os.ReadFile(f)
+		data, err := os.ReadFile(filepath.Join(path, y.Name()))
 		if err != nil {
 			log.Error().Err(err).Msg("Fail read rules")
 			return nil, err
 		}
 
-		if rules, err = parser.Unmarshal(rulesData); err != nil {
-			log.Error().Err(err).Msg("Fail unmarshal rules")
+		opts := append(opts,
+			ast.WithStrict(true),
+			ast.WithJQValidator(func(query string) error {
+				_, err := gojq.Parse(query)
+				return err
+			}))
+
+		rules, err := processRuleData(data, opts...)
+		if err != nil {
+			log.Error().Err(err).Msg("Fail process rule data")
 			return nil, err
 		}
 
-		if err = validateRules(rules, ruleDupes, termDupes, tags); err != nil {
+		if err = validateRules(rules, ruleDupes, tags); err != nil {
 			log.Error().Err(err).Str("file", filepath.Join(path, y.Name())).Msg("Fail validate rules")
 			return nil, err
 		}
 
-		for i, rule := range rules.Rules {
-
-			var r = &rules.Rules[i]
-
-			r.Metadata.Hash, err = HashRule(rule)
-			if err != nil {
-				return nil, err
-			}
+		for _, r := range rules {
 
 			log.Info().
-				Str("hash", r.Metadata.Hash).
-				Str("id", r.Cre.Id).
+				Str("hash", r.rule.Metadata.Hash).
+				Str("id", r.rule.Cre.Id).
 				Msg("Rule")
 
-			allRules.Rules = append(allRules.Rules, *r)
+			allRules = append(allRules, r)
 		}
-
-		for key, term := range rules.TermsT {
-			allRules.TermsT[key] = term
-		}
-
-		if err = compile(rules); err != nil {
-			return nil, err
-		}
-
 	}
 
 	return allRules, nil
+}
+
+type ruleDataT struct {
+	dom     map[string]any
+	rule    ast.AstRuleT
+	payload []byte
+}
+
+func processRuleData(data []byte, opts ...ast.ParseOpt) ([]ruleDataT, error) {
+
+	hashedRules, err := HashRules(data)
+	if err != nil {
+		log.Error().Err(err).Msg("Fail hash rules")
+		return nil, err
+	}
+
+	// Regenerate the yaml for each of the hashed payloads and parse into rules to be returned for downstream processing.
+
+	var outRules []ruleDataT
+
+	for _, hr := range hashedRules {
+
+		payload, err := yaml.Marshal(hr)
+		if err != nil {
+			log.Error().Err(err).Msg("Fail marshal rule")
+			return nil, err
+		}
+
+		rules, err := ast.ParseRules(payload, opts...)
+		if err != nil {
+			log.Error().Err(err).Msg("Fail parse rules")
+			var pe ast.ParseError
+			if errors.As(err, &pe) {
+				fmt.Println(pe.Format(true, true))
+			}
+			return nil, err
+		}
+
+		if len(rules) != 1 {
+			return nil, fmt.Errorf("unexpected number of rules parsed from payload: %d", len(rules))
+		}
+
+		ruleData := ruleDataT{
+			dom:     hr,
+			rule:    rules[0],
+			payload: payload,
+		}
+		outRules = append(outRules, ruleData)
+	}
+
+	return outRules, nil
 }
 
 func containsAny[T comparable](a, b []T) bool {
@@ -208,10 +241,8 @@ func containsAny[T comparable](a, b []T) bool {
 func _build(vers, inPath, outPath, packageName string, exclude []string) error {
 
 	var (
-		allRules  = make(map[string]parser.ParseRuleT)
-		allTerms  = make(map[string]parser.ParseTermT)
+		allRules  = make(map[string]ruleDataT)
 		ruleDupes = make(dupesT)
-		termDupes = make(dupesT)
 		td        *tagDataT
 		err       error
 	)
@@ -234,48 +265,43 @@ func _build(vers, inPath, outPath, packageName string, exclude []string) error {
 	}
 
 	for _, e := range cres {
-
-		var (
-			r   *parser.RulesT
-			err error
-		)
+		zlog := log.With().Str("file", e.Name()).Logger()
 
 		if !e.IsDir() {
-			log.Debug().Str("file", e.Name()).Msg("Skipping")
+			zlog.Debug().Msg("Skipping")
 			continue
 		}
 
 		if !strings.HasPrefix(e.Name(), "cre-") && !strings.HasPrefix(e.Name(), "prequel-") {
-			log.Debug().Str("file", e.Name()).Msg("Skipping")
+			zlog.Debug().Msg("Skipping")
 			continue
 		}
 
-		log.Debug().Str("file", e.Name()).Msg("Processing target")
+		zlog.Debug().Msg("Processing target")
 
-		if r, err = processRules(filepath.Join(inPath, e.Name()), ruleDupes, termDupes, td.dupes); err != nil {
-			log.Error().Err(err).Msg("Fail process rules")
+		rules, err := processRules(filepath.Join(inPath, e.Name()), ruleDupes, td.dupes)
+		if err != nil {
+			zlog.Error().Err(err).Msg("Fail process rules")
 			return err
 		}
 
-		for _, rule := range r.Rules {
-			if containsAny(rule.Cre.Tags, exclude) {
-				log.Info().Str("id", rule.Cre.Id).Msg("Skipping rule due to exclude tag match")
+		for _, r := range rules {
+			if containsAny(r.rule.Cre.Tags, exclude) {
+				zlog.Info().
+					Str("id", r.rule.Cre.Id).
+					Msg("Skipping rule due to exclude tag match")
 				continue
 			}
-			allRules[rule.Cre.Id] = rule
-		}
-
-		for key, term := range r.TermsT {
-			allTerms[key] = term
+			allRules[r.rule.Cre.Id] = r
 		}
 	}
 
-	doc, err := generateDocument(allRules, allTerms)
+	doc, err := generateDocument(allRules)
 	if err != nil {
 		return err
 	}
 
-	// Validate final document compiles
+	/// Validate final document compiles
 	if err = compileCombinedDoc(doc); err != nil {
 		log.Error().Err(err).Msg("Fail compile")
 		return err
@@ -293,42 +319,9 @@ func _build(vers, inPath, outPath, packageName string, exclude []string) error {
 	return nil
 }
 
-func compile(rules *parser.RulesT) error {
-
-	var (
-		tree *parser.TreeT
-		opts = make([]parser.ParseOptT, 0)
-		err  error
-	)
-
-	if tree, err = parser.ParseRules(rules, opts); err != nil {
-		return err
-	}
-
-	if _, err = ast.BuildTree(tree); err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func compileCombinedDoc(data []byte) error {
-
-	var (
-		rules *parser.RulesT
-		opts  = make([]parser.ParseOptT, 0)
-		err   error
-	)
-
-	if rules, err = parser.Read(bytes.NewReader(data)); err != nil {
-		return err
-	}
-
-	if _, err := parser.ParseRules(rules, opts); err != nil {
-		return err
-	}
-
-	return nil
+	_, err := compiler.Compile(data, ast.AstScopeNode)
+	return err
 }
 
 func writeFile(fn string, data []byte) error {
@@ -352,44 +345,38 @@ func makeFilename(name, vers string) string {
 }
 
 // Convert to document per section
-func generateDocument(rules map[string]parser.ParseRuleT, terms map[string]parser.ParseTermT) ([]byte, error) {
+func generateDocument(rules map[string]ruleDataT) ([]byte, error) {
 
 	// Gather keys to produce consistent order output
 	ruleKeys := make([]string, 0, len(rules))
-	for k := range rules {
-		ruleKeys = append(ruleKeys, k)
+	for key := range rules {
+		ruleKeys = append(ruleKeys, key)
 	}
 	sort.Strings(ruleKeys)
 
-	termKeys := make([]string, 0, len(terms))
-	for k := range terms {
-		termKeys = append(termKeys, k)
-	}
-	sort.Strings(termKeys)
+	// Merge together the rule dom's into a single document.
+	// Ideallly this would be N separate yaml documents; however,
+	// the old parser does not support this so we are stuck with this
+	// until the new parser is widely deployed.
 
-	var buf bytes.Buffer
+	ruleList := make([]any, 0, len(rules))
 
-	doc := parser.RulesT{
-		Rules:  make([]parser.ParseRuleT, 0),
-		TermsT: make(map[string]parser.ParseTermT),
-	}
+	for _, key := range ruleKeys {
+		r := rules[key]
+		seqNode, ok := r.dom[kwRules].([]any)
+		if !ok {
+			return nil, fmt.Errorf("expected sequence node, got %T", r.dom[kwRules])
+		}
+		if len(seqNode) != 1 {
+			return nil, fmt.Errorf("expected single rule in sequence, got %d", len(seqNode))
+		}
 
-	for _, k := range ruleKeys {
-		log.Debug().Any("rule", rules[k]).Msg("Adding rule")
-		doc.Rules = append(doc.Rules, rules[k])
-	}
-
-	for _, k := range termKeys {
-		log.Debug().Any("term", terms[k]).Msg("Adding term")
-		doc.TermsT[k] = terms[k]
+		ruleList = append(ruleList, seqNode[0])
 	}
 
-	y, err := yaml.Marshal(&doc)
-	if err != nil {
-		return nil, err
+	root := map[string]any{
+		kwRules: ruleList,
 	}
 
-	buf.Write(y)
-
-	return buf.Bytes(), nil
+	return yaml.Marshal(root)
 }

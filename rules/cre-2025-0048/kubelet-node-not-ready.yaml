@@ -34,6 +34,7 @@ rules:
       window: 5s
       event:
         source: cre.log.kubelet
+        origin: true
       order:
         - Unable to register node with API server
         - regex: "failed to get node info: node(.+)not found"

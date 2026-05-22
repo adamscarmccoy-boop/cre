@@ -84,6 +84,7 @@ rules:
         window: 120s
         event:
           source: cre.log.redis
+          origin: true
         match:
           - regex: "READONLY You can't write against a read only replica"
           - regex: "READONLY You cannot write against a read only replica"

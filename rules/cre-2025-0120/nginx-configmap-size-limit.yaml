@@ -49,12 +49,13 @@ rules:
     metadata:
       kind: prequel
       id: UseRulerToGenerateThis
-      generation: 1
+      gen: 1
     rule:
       set:
         window: 30s
         event:
           source: cre.log.nginx
+          origin: true
         match:
           - regex: "ConfigMap.*is invalid.*Too long.*must have at most 1048576 bytes"
           - regex: "failed to create configmap.*Too long.*must have at most"

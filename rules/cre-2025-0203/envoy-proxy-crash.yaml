@@ -38,6 +38,7 @@ rules:
         window: 1s
         event:
           source: cre.log.envoy
+          origin: true
         match:
           - regex: '(?i)critical\]\[assert\]'
             count: 1

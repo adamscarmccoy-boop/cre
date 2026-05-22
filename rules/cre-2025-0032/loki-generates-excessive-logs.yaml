@@ -44,10 +44,11 @@ rules:
     id: 8LBoHzFdJy9RP4tZcpry2T
     gen: 1
   rule:
-    sequence:
+    set:
       event:
         source: cre.log.loki
+        origin: true
       window: 60s
-      order:
+      match:
         - regex: '.*msg="failed to connect to memcached server.*lookup .* on .*: no such host.*'
           count: 20

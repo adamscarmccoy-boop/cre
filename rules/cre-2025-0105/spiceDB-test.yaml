@@ -2,7 +2,7 @@ rules:
   - metadata:
       kind: prequel
       id: 4MguZvSBSCwvR3PTNbCjEw
-      generation: 1
+      gen: 1
     cre:
       id: CRE-2025-0105
       severity: 1 
@@ -48,5 +48,6 @@ rules:
       set:
         event:
           source: cre.log.spicedb
+          origin: true
         match:
           - regex: 'failed to create datastore|unable to determine datastore state|unable to list namespaces'

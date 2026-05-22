@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.elasticsearch-on-kubernetes-via-eck-elastic-cloud-on-k8s-15-cres
+          origin: true
         match:
           - value: "\\X overhead"

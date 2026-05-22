@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.loki-15-log-based-cre-candidates
+          origin: true
         match:
           - value: "ingester failed to flush"

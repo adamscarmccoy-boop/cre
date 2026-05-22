@@ -44,6 +44,7 @@ rules:
       window: 5s
       event:
         source: cre.log.alloy
+        origin: true
       order:
         - regex: tail routine(.+)started
         - final error sending batch

@@ -58,10 +58,11 @@ rules:
       id: MFH9qot9D8xRzGSAAHnFNw
       kind: prequel
     rule:
-      sequence:
+      set:
         window: 60s
         event:
           source: cre.log.envoy
-        order:
+          origin: true
+        match:
           - regex: '"response_code":(500|503|504)'
             count: 30

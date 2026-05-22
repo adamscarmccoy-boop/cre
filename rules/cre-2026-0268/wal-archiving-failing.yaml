@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.crunchy-postgres-operator-crunchydata-postgres-operator-pgo-v5-postgres-operator
+          origin: true
         match:
           - value: "archive_command failed"

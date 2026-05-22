@@ -32,5 +32,6 @@ rules:
       set:
         event:
           source: cre.log.ingress-nginx-kubernetes-ingress-nginx
+          origin: true
         match:
           - value: "Error reloading NGINX"

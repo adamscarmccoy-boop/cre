@@ -53,5 +53,6 @@ rules:
     set:
       event:
         source: cre.log.nats
+        origin: true
       match:
         - value: "[WRN] Maximum payloads over 8.00 MB are generally discouraged and could lead to poor performance"

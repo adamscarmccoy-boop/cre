@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.coredns-coredns-coredns
+          origin: true
         match:
           - value: "no healthy upstream"

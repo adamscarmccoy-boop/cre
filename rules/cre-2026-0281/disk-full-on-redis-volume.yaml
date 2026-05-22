@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.redis-on-kubernetes-commonly-spotahome-redis-operator-or-redis-pods-managed-by-s
+          origin: true
         match:
           - value: "No space left on device"

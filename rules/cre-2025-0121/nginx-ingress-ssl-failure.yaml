@@ -89,5 +89,6 @@ rules:
       set:
         event:
           source: cre.log.nginx
+          origin: true
         match:
           - regex: "SSL.*certificate.*verify.*failed|SSL.*handshake.*failed|certificate.*verify.*error|upstream.*SSL.*certificate.*verify.*failed|SSL.*connect.*error|upstream.*ssl.*handshake|502.*Bad.*Gateway|503.*Service.*Unavailable|upstream.*timed.*out.*SSL"

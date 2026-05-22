@@ -79,6 +79,7 @@ rules:
         window: 120s
         event:
           source: cre.log.redis
+          origin: true
         order:
           - regex: "OOM command not allowed when used memory > 'maxmemory'"
           - regex: "MISCONF Redis is configured to save RDB snapshots, but it's currently unable to persist to disk"

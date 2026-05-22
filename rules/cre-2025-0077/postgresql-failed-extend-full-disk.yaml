@@ -41,5 +41,6 @@ rules:
       set:
         event:
           source: cre.log.postgresql
+          origin: true
         match:
         - regex: 'ERROR:  could not extend file "[^"]+": (No space left on device|wrote only \d+ of \d+ bytes at block \d+)'

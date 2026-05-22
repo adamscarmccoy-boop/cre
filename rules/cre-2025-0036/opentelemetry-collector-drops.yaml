@@ -43,5 +43,6 @@ rules:
     set:
       event:
         source: cre.log.opentelemetry-collector
+        origin: true
       match:
         - regex: 'internal/queue_sender.*Exporting failed.*"exporter".*Permanent error: 413 Payload Too Large.*'

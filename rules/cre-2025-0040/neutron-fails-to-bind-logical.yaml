@@ -42,6 +42,7 @@ rules:
     set:
       event:
         source: cre.log.neutron
+        origin: true
       window: 5s
       match:
         - regex: '.*RowNotFound: Cannot find Logical_Switch with name=.*'

@@ -47,6 +47,7 @@ rules:
         window: 300s
         event:
           source: cre.kubernetes
+          origin: true
         match:
           - regex: 'Readiness probe failed: .*: context deadline exceeded \(Client.Timeout exceeded while awaiting headers\)'
             count: 4

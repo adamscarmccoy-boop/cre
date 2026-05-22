@@ -2,7 +2,7 @@ rules:
   - metadata:
       kind: prequel
       id: 4rEVBMgFrM3ffjTHmmyEyP
-      generation: 1
+      gen: 1
     cre:
       id: CRE-2025-0107
       severity: 2
@@ -47,5 +47,6 @@ rules:
       set:
         event:
           source: cre.log.redpanda
+          origin: true
         match:
           - regex: '(?i)(?:Failed to stat snapshot file.*No such file or directory|Can''t load config cache.*No such file or directory)'

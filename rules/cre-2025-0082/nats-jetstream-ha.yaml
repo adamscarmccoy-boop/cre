@@ -2,7 +2,6 @@ rules:
   - metadata:
       kind: prequel
       id: QsYzSA81AJSgnVqaQt4XGS
-      version: "0.1.0"
     cre:
       id: CRE-2025-0082
       severity: 1
@@ -41,7 +40,6 @@ rules:
         - "https://github.com/nats-io/nats-server/issues/6921"
         - "https://github.com/nats-io/nats-server/issues/6929"
       reports: 3
-      version: "0.1.0"
       tags:
         - nats
         - jetstream
@@ -55,6 +53,7 @@ rules:
       set:
         event:
           source: cre.log.nats
+          origin: true
         match:
           - regex: "monitor goroutine not running|Fetch error: context deadline exceeded|UNSYNCED"
         negate:

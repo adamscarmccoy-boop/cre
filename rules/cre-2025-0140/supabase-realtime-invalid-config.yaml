@@ -69,6 +69,7 @@ rules:
         window: 5m
         event:
           source: cre.log.realtime
+          origin: true
         match:
           - regex: 'invalid.*replication.*mode|REPLICATION_MODE.*unknown|realtime.*configuration.*error'
           - regex: 'SECRET_KEY_BASE.*invalid|DB_ENC_KEY.*missing|realtime.*startup.*failed'

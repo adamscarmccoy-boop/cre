@@ -69,6 +69,7 @@ rules:
         window: 5m
         event:
           source: cre.log.storage
+          origin: true
         match:
           - regex: 'AWS.*credentials.*invalid|S3.*authentication.*failed|AccessDenied.*S3'
           - regex: 'NoSuchBucket.*does not exist|InvalidAccessKeyId|SignatureDoesNotMatch'

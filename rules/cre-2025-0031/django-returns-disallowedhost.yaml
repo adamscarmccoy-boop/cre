@@ -49,6 +49,7 @@ rules:
     set:
       event:
         source: cre.log.django
+        origin: true
       window: 5s
       match:
       - regex: 'django.security.DisallowedHost: Invalid HTTP_HOST header.*'

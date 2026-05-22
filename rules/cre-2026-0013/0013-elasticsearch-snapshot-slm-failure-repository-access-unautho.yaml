@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.elasticsearch
+          origin: true
         match:
           - value: "StorageException[401 Unauthorized]"

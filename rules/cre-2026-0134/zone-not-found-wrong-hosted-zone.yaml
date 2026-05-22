@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.external-dns-kubernetes-sigs-external-dns
+          origin: true
         match:
           - value: "zone not found"

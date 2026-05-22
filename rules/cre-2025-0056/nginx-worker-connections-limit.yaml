@@ -55,5 +55,6 @@ rules:
     set:
         event:
             source: cre.log.nginx
+            origin: true
         match:
             - worker_connections are not enough

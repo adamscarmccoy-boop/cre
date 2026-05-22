@@ -42,5 +42,6 @@ rules:
     set:
       event:
         source: cre.log.sqlalchemy
+        origin: true
       match:
         - regex: '.*sqlalchemy.exc.ArgumentError: Could not parse rfc1738 URL from string.*'

@@ -63,6 +63,7 @@ rules:
         window: 5m
         event:
           source: cre.log.docker
+          origin: true
         match:
           - regex: 'Error starting userland proxy.*:9999.*bind: address already in use'
           - regex: 'port is already allocated.*9999|Ports are not available.*:9999'

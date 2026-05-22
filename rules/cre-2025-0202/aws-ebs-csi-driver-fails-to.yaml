@@ -37,6 +37,7 @@ rules:
     set:
       event:
         source: cre.log.ebs-csi-snapshotter
+        origin: true
       window: 1m
       match:
         - value: Unhandled Error

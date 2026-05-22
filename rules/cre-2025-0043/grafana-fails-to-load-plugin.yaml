@@ -43,5 +43,6 @@ rules:
     set:
       event:
         source: cre.log.grafana
+        origin: true
       match:
         - regex: .*Plugin validation failed.*has no signature.*

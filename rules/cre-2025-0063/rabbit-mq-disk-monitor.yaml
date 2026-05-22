@@ -37,6 +37,7 @@ rules:
     set:
       event:
         source: cre.log.rabbitmq
+        origin: true
       window: 60s
       match:
         - 'Generic server rabbit_disk_monitor terminating '

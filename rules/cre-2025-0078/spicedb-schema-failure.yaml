@@ -40,24 +40,24 @@ rules:
         - Run: `psql -U postgres -d spicedb -c "\dt"` to inspect existing tables.
         - If tables are missing, initialize and apply migrations:
          `spicedb migrate init && spicedb migrate head`
-      VALIDATION:
-        - Confirm presence of required tables:- `metadata`
-          - `alembic_version`
-          - `relation_tuple_transaction`
-        - Validate Alembic status:`SELECT * FROM alembic_version;`
-      RECOVERY:
-        - If migrations fail or tables are corrupted, restore from a known-good backup.
-        - Consider dropping the database and re-running migrations only if data loss is acceptable.
-      PREVENTION:
-        - Use **init containers** or pre-start hooks to apply migrations **before** SpiceDB starts.
-        - Monitor logs for missing relation errors (`relation does not exist`).
-        - Ensure correct user permissions for running migrations.
-        - Avoid race conditions by starting database fully before SpiceDB.
-      references:
-        - https://docs.authzed.com/spicedb/concepts/datastore-migrations
-        - https://github.com/authzed/spicedb/issues?q=relation+does+not+exist
-        - https://alembic.sqlalchemy.org
-        - https://github.com/authzed/spicedb/issues/1712
+        VALIDATION:
+          - Confirm presence of required tables:- `metadata`
+            - `alembic_version`
+            - `relation_tuple_transaction`
+          - Validate Alembic status:`SELECT * FROM alembic_version;`
+        RECOVERY:
+          - If migrations fail or tables are corrupted, restore from a known-good backup.
+          - Consider dropping the database and re-running migrations only if data loss is acceptable.
+        PREVENTION:
+          - Use **init containers** or pre-start hooks to apply migrations **before** SpiceDB starts.
+          - Monitor logs for missing relation errors (`relation does not exist`).
+          - Ensure correct user permissions for running migrations.
+          - Avoid race conditions by starting database fully before SpiceDB.
+        references:
+          - https://docs.authzed.com/spicedb/concepts/datastore-migrations
+          - https://github.com/authzed/spicedb/issues?q=relation+does+not+exist
+          - https://alembic.sqlalchemy.org
+          - https://github.com/authzed/spicedb/issues/1712
       applications:
         - name: spicedb
           version: ">=1.0.0"
@@ -73,6 +73,7 @@ rules:
         window: 5m
         event:
           source: cre.log.spicedb
+          origin: true
         match:
           - regex: 'ERROR:\s+relation\s+"(metadata|alembic_version|relation_tuple_transaction)"\s+does\s+not\s+exist\s+at\s+character\s+\d+'
           - regex: 'ERROR:\s+relation\s+".*tuple.*"\s+does\s+not\s+exist\s+at\s+character\s+\d+'

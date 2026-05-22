@@ -44,6 +44,7 @@ rules:
     set:
       event:
         source: cre.log.datadog.agent
+        origin: true
       match:
         - regex: 'failed to register CWS Instrumentation webhook.*cluster_agent\.service_account_name'
 

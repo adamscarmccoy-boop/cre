@@ -38,5 +38,6 @@ rules:
     set:
       event:
         source: cre.log.datadog.agent
+        origin: true
       match:
         - regex: "Error running check:.*http://[0-9.]+:7801/metrics: 404 Client Error: Not Found for url: http://[0-9.]+:7801/metrics"

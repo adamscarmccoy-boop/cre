@@ -59,5 +59,6 @@ rules:
       set:
         event:
           source: cre.log.postgresql
+          origin: true
         match:
           - regex: 'FATAL.*could not start WAL streaming: (replication slot|ERROR:  replication slot) "patroni[0-9]+" does not exist|ERROR.*replication slot "patroni[0-9]+" does not exist|ERROR.*dd: error writing.*No space left on device|failed to resolve host etcd[0-9]: \[Errno -3\] Temporary failure in name resolution|Failed to get list of machines from http://etcd[0-9]:2379/v3beta: MaxRetryError|etcd\.EtcdConnectionFailed: No more machines in the cluster|Request to server http://[0-9.]+:2379 failed: (ReadTimeoutError|MaxRetryError)|watchprefix failed: ProtocolError.*InvalidChunkLength'

@@ -31,5 +31,6 @@ rules:
       set:
         event:
           source: cre.log.fluent-bit-15-log-based-cre-candidates
+          origin: true
         match:
           - value: "cannot be retried"
